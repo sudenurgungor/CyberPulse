@@ -31,3 +31,7 @@ htmlcov/
 *.temp
 *.bak
 *.swp
+
+# Environment variables
+.env
+.env.*
