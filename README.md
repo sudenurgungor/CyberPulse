@@ -25,13 +25,13 @@ CyberPulse is a lightweight **Real-Time Intrusion Detection and Prevention Syste
 
 The system monitors network traffic in real time, detects malicious activities, stores attack records in a PostgreSQL database, and automatically blocks malicious IP addresses using firewall rules.
 
-CyberPulse provides an interactive web dashboard that allows administrators to monitor attacks, manage blocked IP addresses, configure security rules, and analyze attack statistics.
+CyberPulse also provides an interactive web dashboard for monitoring attacks, managing IP addresses, and configuring security rules.
 
 ---
 
 # 🎓 Academic Project
 
-This project was developed as a Software Engineering Graduation Project and demonstrates practical implementations of:
+This project demonstrates practical implementations of:
 
 - Network Monitoring
 - Intrusion Detection
@@ -67,22 +67,18 @@ CyberPulse was tested in a virtual laboratory environment consisting of multiple
 │   Attacker VM    │
 └────────┬─────────┘
          │
-         │ Attack Traffic
          ▼
 ┌──────────────────┐
-│   CyberPulse     │
+│    CyberPulse    │
 │      IDS/IPS     │
 └────────┬─────────┘
          │
-         │ Detected Attacks
-         ▼
-┌──────────────────┐
-│ Flask Dashboard  │
-│ PostgreSQL DB    │
-└──────────────────┘
+         ├────────► PostgreSQL Database
+         │
+         └────────► Flask Dashboard
 ```
 
-The IDS/IPS monitors network traffic and records detected attacks into PostgreSQL while presenting live statistics on the dashboard.
+The IDS/IPS monitors network traffic, records detected attacks into PostgreSQL, and provides real-time statistics through the web dashboard.
 
 ---
 
@@ -192,12 +188,6 @@ CyberPulse
 │   ├── main.py
 │   ├── sniffer.py
 │   └── templates
-│       ├── blocked_ips.html
-│       ├── dashboard.html
-│       ├── ip_lists.html
-│       ├── login.html
-│       ├── logs.html
-│       └── settings.html
 │
 ├── rules_config.json
 ├── README.md
@@ -208,27 +198,27 @@ CyberPulse
 
 # ⚙️ Installation
 
-## 1️⃣ Clone Repository
+### 1️⃣ Clone Repository
 
 ```bash
 git clone https://github.com/sudenurgungor/CyberPulse.git
 cd CyberPulse
 ```
 
-## 2️⃣ Create Virtual Environment
+### 2️⃣ Create Virtual Environment
 
 ```bash
 python3 -m venv venv
 source venv/bin/activate
 ```
 
-## 3️⃣ Install Dependencies
+### 3️⃣ Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## 4️⃣ Configure Database
+### 4️⃣ Configure Database
 
 Edit:
 
@@ -289,6 +279,20 @@ http://127.0.0.1:5000
 | XSS Block Threshold | 3 attempts |
 | High Traffic Threshold | 40 packets / 5 seconds |
 | Port Scan Threshold | 5 different ports |
+
+---
+
+# 🛠 Skills Demonstrated
+
+- Python Programming
+- Network Security
+- Packet Analysis
+- Database Management
+- Web Development
+- Linux Administration
+- Firewall Management
+- Intrusion Detection
+- Secure System Design
 
 ---
 
