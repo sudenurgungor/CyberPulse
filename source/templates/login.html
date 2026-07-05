@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>IDS Login</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #08142b, #0b1d3a);
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .login-box {
+            background: rgba(20, 35, 65, 0.95);
+            padding: 40px;
+            width: 360px;
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            text-align: center;
+        }
+
+        .login-box h2 {
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .login-box p {
+            color: #94a3b8;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        .error-box {
+    background: rgba(239, 68, 68, 0.15);
+    color: #fca5a5;
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: none;
+            border-radius: 10px;
+            outline: none;
+            background: #0f172a;
+            color: white;
+        }
+
+        input::placeholder {
+            color: #64748b;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        .footer-text {
+            margin-top: 20px;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        input:focus {
+    border: 1px solid #2563eb;
+    box-shadow: 0 0 5px rgba(37, 99, 235, 0.5);
+}
+
+       button:hover{
+        transform: translateY(-2px);
+       }
+    </style>
+</head>
+<body>
+
+    <div class="login-box">
+        <h2>IDS / IPS Login</h2>
+        <p>Authorized users only • IDS Monitoring System </p>
+        
+        {% if error %}
+    <div class="error-box">
+        {{ error }}
+    </div>
+{% endif %}
+
+        <form method="POST">
+            <input type="text" name="username" placeholder="Username" required>
+            <input type="password" name="password" placeholder="Password" required>
+
+            <button type="submit">Login</button>
+        </form>
+
+        <div class="footer-text">
+            Real-Time Network Security System
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Blocked IPs</title>
+
+    <style>
+        body {
+            margin: 0;
+            background: #0b1220;
+            color: #e5e7eb;
+            font-family: Arial, sans-serif;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 230px;
+            height: 100vh;
+            background: #111827;
+            border-right: 1px solid #1f2937;
+            padding: 25px 18px;
+        }
+
+        .sidebar-title {
+            color: white;
+            font-weight: bold;
+            font-size: 22px;
+            margin-bottom: 30px;
+        }
+
+        .sidebar-link {
+            display: block;
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .sidebar-link:hover,
+        .sidebar-link.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .sidebar-link.logout {
+            margin-top: 25px;
+            background: rgba(220, 53, 69, 0.15);
+            color: #fca5a5;
+        }
+
+        .main {
+            margin-left: 260px;
+            padding: 30px;
+        }
+
+        .top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #94a3b8;
+        }
+
+        .card {
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #1f2937;
+        }
+
+        th {
+            color: #cbd5e1;
+            text-align: left;
+        }
+
+        tr:hover {
+            background: #0f172a;
+        }
+
+        .empty {
+            color: #94a3b8;
+            font-style: italic;
+        }
+
+        .btn-unblock {
+            padding: 7px 12px;
+            border-radius: 8px;
+            background: rgba(34, 197, 94, 0.16);
+            color: #86efac;
+            border: 1px solid rgba(34, 197, 94, 0.45);
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .btn-unblock:hover {
+            background: #22c55e;
+            color: #052e16;
+        }
+
+        .btn-reset {
+            padding: 10px 14px;
+            border-radius: 10px;
+            background: #dc2626;
+            color: white;
+            border: none;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-reset:hover {
+            background: #b91c1c;
+        }
+
+        .reason {
+            color: #fcd34d;
+        }
+
+        .ip-address {
+            color: #93c5fd;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="sidebar-title">IDS / IPS</div>
+
+        <a href="/" class="sidebar-link">Dashboard</a>
+        <a href="/ip-lists" class="sidebar-link">IP Lists</a>
+        <a href="/blocked-ips" class="sidebar-link active">Blocked IPs</a>
+        <a href="/logs" class="sidebar-link">Logs</a>
+        <a href="/settings" class="sidebar-link">Settings</a>
+        <a href="/logout" class="sidebar-link logout">Logout</a>
+    </div>
+
+    <div class="main">
+
+        <div class="top-row">
+            <div>
+                <div class="title">Blocked IP Addresses</div>
+                <div class="subtitle">Automatically blocked by the IPS system</div>
+            </div>
+
+            <button onclick="resetBlocks()" class="btn-reset">
+                Reset All Blocks
+            </button>
+        </div>
+
+        <div class="card">
+            {% if ips %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>IP Address</th>
+                        <th>Reason</th>
+                        <th>Blocked At</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for ip in ips %}
+                    <tr>
+                        <td class="ip-address">{{ ip[1] }}</td>
+                        <td class="reason">{{ ip[2] if ip[2] else "N/A" }}</td>
+                        <td>{{ ip[3].strftime("%Y-%m-%d %H:%M:%S") }}</td>
+                        <td>
+                            <a href="/unblock/{{ ip[1] }}"
+                               class="btn-unblock"
+                               onclick="return confirm('Are you sure you want to unblock {{ ip[1] }}?');">
+                                Unblock
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+                <p class="empty">No blocked IP records found.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        async function resetBlocks() {
+            if (!confirm("Are you sure you want to reset all blocked IPs?")) {
+                return;
+            }
+
+            try {
+                const response = await fetch("/reset-blocks", {
+                    method: "POST"
+                });
+
+                const data = await response.json();
+
+                alert(data.message);
+                window.location.reload();
+
+            } catch (error) {
+                alert("Error resetting blocked IP rules.");
+                console.log("Reset blocks error:", error);
+            }
+        }
+    </script>
+
+</body>
+</html>

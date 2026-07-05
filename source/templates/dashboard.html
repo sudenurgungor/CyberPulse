@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IDS Dashboard</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            background: #0b1220;
+            color: #e5e7eb;
+            font-family: Arial, sans-serif;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 230px;
+            height: 100vh;
+            background: #111827;
+            border-right: 1px solid #1f2937;
+            padding: 25px 18px;
+            z-index: 1000;
+        }
+
+        .sidebar-title {
+            color: white;
+            font-weight: bold;
+            font-size: 22px;
+            margin-bottom: 30px;
+            letter-spacing: 1px;
+        }
+
+        .sidebar-link {
+            display: block;
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 12px 14px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .sidebar-link:hover,
+        .sidebar-link.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        .sidebar-link.logout {
+            margin-top: 25px;
+            background: rgba(220, 53, 69, 0.15);
+            color: #fca5a5;
+        }
+
+        .main-content {
+            margin-left: 260px;
+            width: calc(100% - 260px);
+        }
+
+        .top-status {
+            background: #020617;
+            padding: 12px 20px;
+            border-bottom: 1px solid #1f2937;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .top-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .system-active {
+            color: #22c55e;
+            font-weight: bold;
+        }
+
+        .status-text {
+            color: #94a3b8;
+        }
+
+        .reset-btn {
+            background: #dc2626;
+            border: none;
+            color: white;
+            font-weight: 700;
+            border-radius: 10px;
+            padding: 8px 14px;
+        }
+
+        .reset-btn:hover {
+            background: #b91c1c;
+            color: white;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #ffffff;
+        }
+
+        .page-subtitle {
+            color: #94a3b8;
+            margin-bottom: 25px;
+        }
+
+        .card-custom {
+            background: #111827;
+            border: 1px solid #1f2937;
+            border-radius: 16px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+            padding: 20px;
+            height: 100%;
+        }
+
+        .summary-card {
+            min-height: 130px;
+        }
+
+        .summary-title {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .summary-value {
+            font-size: 30px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .summary-note {
+            margin-top: 8px;
+            font-size: 12px;
+            color: #9ca3af;
+        }
+
+        .border-red { border-left: 5px solid #ef4444; }
+        .border-yellow { border-left: 5px solid #f59e0b; }
+        .border-green { border-left: 5px solid #22c55e; }
+        .border-blue { border-left: 5px solid #3b82f6; }
+        .border-purple { border-left: 5px solid #a855f7; }
+        .border-orange { border-left: 5px solid #f97316; }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 16px;
+        }
+
+        .chart-box {
+            height: 300px;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .table-dark-custom {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table-dark-custom thead {
+            background: #1f2937;
+        }
+
+        .table-dark-custom th,
+        .table-dark-custom td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #1f2937;
+            font-size: 14px;
+        }
+
+        .table-dark-custom th {
+            color: #cbd5e1;
+            font-weight: 600;
+            text-align: left;
+        }
+
+        .table-dark-custom td {
+            color: #e5e7eb;
+        }
+
+        .table-dark-custom tbody tr:hover {
+            background: #1e293b;
+        }
+
+        .badge-custom {
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .badge-high {
+            background: rgba(239, 68, 68, 0.18);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.35);
+        }
+
+        .badge-medium {
+            background: rgba(245, 158, 11, 0.18);
+            color: #fcd34d;
+            border: 1px solid rgba(245, 158, 11, 0.35);
+        }
+
+        .badge-low {
+            background: rgba(34, 197, 94, 0.18);
+            color: #86efac;
+            border: 1px solid rgba(34, 197, 94, 0.35);
+        }
+
+        .status-detected {
+            color: #fcd34d;
+            font-weight: 600;
+        }
+
+        .status-blocked {
+            color: #fca5a5;
+            font-weight: 600;
+        }
+
+        .action-text {
+            color: #93c5fd;
+            font-weight: 600;
+        }
+
+        .small-info-box {
+            background: #0f172a;
+            border: 1px solid #1f2937;
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 14px;
+        }
+
+        .small-info-box h6 {
+            color: #94a3b8;
+            font-size: 13px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .small-info-box p {
+            margin: 0;
+            color: white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .empty-text {
+            color: #94a3b8;
+            font-style: italic;
+            margin: 0;
+        }
+
+        .footer-note {
+            color: #64748b;
+            font-size: 13px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    {% set total_blocked = blocked_ips|length %}
+
+    <div class="sidebar">
+        <div class="sidebar-title">IDS / IPS</div>
+
+        <a href="/" class="sidebar-link active">Dashboard</a>
+        <a href="/ip-lists" class="sidebar-link">IP Lists</a>
+        <a href="/blocked-ips" class="sidebar-link">Blocked IPs</a>
+        <a href="/logs" class="sidebar-link">Logs</a>
+        <a href="/settings" class="sidebar-link">Settings</a>
+        <a href="/logout" class="sidebar-link logout">Logout</a>
+    </div>
+
+    <div class="container-fluid py-4 px-4 main-content">
+
+        <div class="top-status">
+            <div class="top-left">
+                <span class="system-active">● SYSTEM ACTIVE</span>
+                <span class="status-text">Real-time IDS monitoring | Live dashboard update every 5 seconds</span>
+            </div>
+
+            <button onclick="resetBlocks()" class="reset-btn">
+                Reset Blocks
+            </button>
+        </div>
+
+        <div class="page-title">Intrusion Detection Monitoring Panel</div>
+        <div class="page-subtitle">
+            Live view of detected attacks, blocked IP addresses and attack statistics
+        </div>
+
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
+                <div class="card-custom summary-card border-red">
+                    <div class="summary-title">Total Detected Attacks</div>
+                    <div class="summary-value" id="total-attacks">{{ stats.total_attacks }}</div>
+                    <div class="summary-note">All records in database</div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card-custom summary-card border-yellow">
+                    <div class="summary-title">High Severity Alerts</div>
+                    <div class="summary-value" id="high-count">{{ stats.high_count }}</div>
+                    <div class="summary-note">Severity level: High</div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card-custom summary-card border-blue">
+                    <div class="summary-title">Port Scan Attacks</div>
+                    <div class="summary-value" id="port-scan-count">{{ stats.port_scan_count }}</div>
+                    <div class="summary-note">Detected scanning attempts</div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card-custom summary-card border-green">
+                    <div class="summary-title">Blocked IP Addresses</div>
+                    <div class="summary-value" id="blocked-count">{{ total_blocked }}</div>
+                    <div class="summary-note">Recent blocked IP records</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+            <div class="col-md-3">
+                <div class="card-custom summary-card border-red">
+                    <div class="summary-title">SQL Injection</div>
+                    <div class="summary-value" id="sql-count">{{ stats.sql_count }}</div>
+                    <div class="summary-note">Database attack attempts</div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card-custom summary-card border-purple">
+                    <div class="summary-title">XSS Attacks</div>
+                    <div class="summary-value" id="xss-count">{{ stats.xss_count }}</div>
+                    <div class="summary-note">Client-side script injection</div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card-custom summary-card border-orange">
+                    <div class="summary-title">Brute Force</div>
+                    <div class="summary-value" id="brute-count">{{ stats.brute_count }}</div>
+                    <div class="summary-note">Failed login attack attempts</div>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="card-custom summary-card border-yellow">
+                    <div class="summary-title">High Traffic</div>
+                    <div class="summary-value" id="high-traffic-count">{{ stats.high_traffic_count }}</div>
+                    <div class="summary-note">Flood-like traffic detection</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+            <div class="col-lg-6">
+                <div class="card-custom">
+                    <div class="section-title">Attack Count Chart</div>
+                    <div class="chart-box">
+                        <canvas id="attackTypeChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card-custom">
+                    <div class="section-title">Severity Distribution</div>
+                    <div class="chart-box">
+                        <canvas id="severityChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4 mb-4">
+            <div class="col-lg-12">
+                <div class="card-custom">
+                    <div class="section-title">Recent Attack Order</div>
+                    <div class="chart-box">
+                        <canvas id="timelineChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="card-custom">
+                    <div class="section-title">Recent Attacks</div>
+
+                    <div class="table-container">
+                        <table class="table-dark-custom">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Attack Type</th>
+                                    <th>Source IP</th>
+                                    <th>Target IP</th>
+                                    <th>Protocol</th>
+                                    <th>Severity</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                    <th>Detected At</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="attacks-table-body">
+                                {% if attacks %}
+                                    {% for attack in attacks %}
+                                    <tr>
+                                        <td>{{ attack[0] }}</td>
+
+                                        <td>
+                                            {% if attack[1] == "High Traffic" %}
+                                                🚨 High Traffic
+                                            {% elif attack[1] == "Port Scan" %}
+                                                🔍 Port Scan
+                                            {% elif attack[1] == "SQL Injection" %}
+                                                💉 SQL Injection
+                                            {% elif attack[1] == "XSS Attack" %}
+                                                🧪 XSS Attack
+                                            {% elif attack[1] == "Brute Force" %}
+                                                🔐 Brute Force
+                                            {% else %}
+                                                {{ attack[1] }}
+                                            {% endif %}
+                                        </td>
+
+                                        <td>{{ attack[2] }}</td>
+                                        <td>{{ attack[3] if attack[3] else "-" }}</td>
+                                        <td>{{ attack[4] }}</td>
+
+                                        <td>
+                                            {% if attack[5] == "High" %}
+                                                <span class="badge-custom badge-high">{{ attack[5] }}</span>
+                                            {% elif attack[5] == "Medium" %}
+                                                <span class="badge-custom badge-medium">{{ attack[5] }}</span>
+                                            {% else %}
+                                                <span class="badge-custom badge-low">{{ attack[5] }}</span>
+                                            {% endif %}
+                                        </td>
+
+                                        <td>
+                                            {% if attack[6] == "blocked" or attack[7] == "blocked" %}
+                                                <span class="status-blocked">🔴 Blocked</span>
+                                            {% else %}
+                                                <span class="status-detected">🟡 Detected</span>
+                                            {% endif %}
+                                        </td>
+
+                                        <td>
+                                            {% if attack[7] == "blocked" %}
+                                                <span class="action-text">IP Blocked</span>
+                                            {% elif attack[7] == "monitored" %}
+                                                <span class="action-text">Monitoring</span>
+                                            {% else %}
+                                                <span class="action-text">{{ attack[7] }}</span>
+                                            {% endif %}
+                                        </td>
+
+                                        <td>{{ attack[8].strftime("%Y-%m-%d %H:%M:%S") }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                {% else %}
+                                    <tr>
+                                        <td colspan="9" class="empty-text">No attack records found.</td>
+                                    </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+                <div class="card-custom mb-4">
+                    <div class="section-title">System Summary</div>
+
+                    <div class="small-info-box">
+                        <h6>SQL Injection Alerts</h6>
+                        <p id="summary-sql-count">{{ stats.sql_count }}</p>
+                    </div>
+
+                    <div class="small-info-box">
+                        <h6>XSS Alerts</h6>
+                        <p id="summary-xss-count">{{ stats.xss_count }}</p>
+                    </div>
+
+                    <div class="small-info-box">
+                        <h6>Brute Force Alerts</h6>
+                        <p id="summary-brute-count">{{ stats.brute_count }}</p>
+                    </div>
+
+                    <div class="small-info-box">
+                        <h6>Port Scan Alerts</h6>
+                        <p id="summary-port-scan-count">{{ stats.port_scan_count }}</p>
+                    </div>
+
+                    <div class="small-info-box">
+                        <h6>High Traffic Alerts</h6>
+                        <p id="summary-high-traffic-count">{{ stats.high_traffic_count }}</p>
+                    </div>
+
+                    <div class="small-info-box">
+                        <h6>Medium Severity Alerts</h6>
+                        <p id="summary-medium-count">{{ stats.medium_count }}</p>
+                    </div>
+
+                    <div class="small-info-box">
+                        <h6>System Status</h6>
+                        <p>Monitoring Active</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            Dashboard is based on real database records from the IDS monitoring system.
+        </div>
+
+    </div>
+
+    <script>
+        let attackTypeChart;
+        let severityChart;
+        let timelineChart;
+
+        function getAttackName(attackType) {
+            if (attackType === "High Traffic") return "🚨 High Traffic";
+            if (attackType === "Port Scan") return "🔍 Port Scan";
+            if (attackType === "SQL Injection") return "💉 SQL Injection";
+            if (attackType === "XSS Attack") return "🧪 XSS Attack";
+            if (attackType === "Brute Force") return "🔐 Brute Force";
+            return attackType;
+        }
+
+        function getSeverityClass(severity) {
+            if (severity === "High") return "badge-high";
+            if (severity === "Medium") return "badge-medium";
+            return "badge-low";
+        }
+
+        function getStatusHtml(status, action) {
+            if (status === "blocked" || action === "blocked") {
+                return '<span class="status-blocked">🔴 Blocked</span>';
+            }
+
+            return '<span class="status-detected">🟡 Detected</span>';
+        }
+
+        function getActionText(action) {
+            if (action === "blocked") return "IP Blocked";
+            if (action === "monitored") return "Monitoring";
+            return action || "-";
+        }
+
+        async function resetBlocks() {
+            if (!confirm("Are you sure you want to reset all blocked IPs?")) {
+                return;
+            }
+
+            try {
+                const response = await fetch("/reset-blocks", {
+                    method: "POST"
+                });
+
+                const data = await response.json();
+
+                alert(data.message);
+                updateDashboard();
+
+            } catch (error) {
+                alert("Error resetting blocked IP rules.");
+                console.log("Reset blocks error:", error);
+            }
+        }
+
+        function createCharts() {
+            attackTypeChart = new Chart(document.getElementById("attackTypeChart"), {
+                type: "bar",
+                data: {
+                    labels: ["SQL Injection", "XSS", "Brute Force", "Port Scan", "High Traffic"],
+                    datasets: [{
+                        label: "Attack Count",
+                        data: [
+                            Number("{{ stats.sql_count }}"),
+                            Number("{{ stats.xss_count }}"),
+                            Number("{{ stats.brute_count }}"),
+                            Number("{{ stats.port_scan_count }}"),
+                            Number("{{ stats.high_traffic_count }}")
+                        ],
+                        backgroundColor: ["#ef4444", "#a855f7", "#f97316", "#3b82f6", "#f59e0b"],
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: "#e5e7eb" } } },
+                    scales: {
+                        x: { ticks: { color: "#cbd5e1" }, grid: { color: "#1f2937" } },
+                        y: { beginAtZero: true, ticks: { color: "#cbd5e1", precision: 0 }, grid: { color: "#1f2937" } }
+                    }
+                }
+            });
+
+            severityChart = new Chart(document.getElementById("severityChart"), {
+                type: "doughnut",
+                data: {
+                    labels: ["High", "Medium", "Low"],
+                    datasets: [{
+                        label: "Severity Count",
+                        data: [
+                            Number("{{ stats.high_count }}"),
+                            Number("{{ stats.medium_count }}"),
+                            Number("{{ stats.low_count if stats.low_count is defined else 0 }}")
+                        ],
+                        backgroundColor: ["#ef4444", "#f59e0b", "#22c55e"],
+                        borderColor: "#111827",
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: "#e5e7eb" } } }
+                }
+            });
+
+            timelineChart = new Chart(document.getElementById("timelineChart"), {
+                type: "line",
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: "Recent Attack Order",
+                        data: [],
+                        borderColor: "#38bdf8",
+                        backgroundColor: "rgba(56, 189, 248, 0.15)",
+                        tension: 0.35,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: "#e5e7eb" } } },
+                    scales: {
+                        x: { ticks: { color: "#cbd5e1" }, grid: { color: "#1f2937" } },
+                        y: { beginAtZero: true, ticks: { color: "#cbd5e1", precision: 0 }, grid: { color: "#1f2937" } }
+                    }
+                }
+            });
+        }
+
+        function updateCharts(data) {
+            attackTypeChart.data.datasets[0].data = [
+                data.stats.sql_count,
+                data.stats.xss_count,
+                data.stats.brute_count,
+                data.stats.port_scan_count,
+                data.stats.high_traffic_count
+            ];
+            attackTypeChart.update();
+
+            severityChart.data.datasets[0].data = [
+                data.stats.high_count,
+                data.stats.medium_count,
+                data.stats.low_count || 0
+            ];
+            severityChart.update();
+
+            const timeLabels = [];
+            const timeValues = [];
+
+            const reversedAttacks = [...data.attacks].reverse();
+
+            reversedAttacks.forEach((attack, index) => {
+                timeLabels.push(attack.detected_at);
+                timeValues.push(index + 1);
+            });
+
+            timelineChart.data.labels = timeLabels;
+            timelineChart.data.datasets[0].data = timeValues;
+            timelineChart.update();
+        }
+
+        async function updateDashboard() {
+            try {
+                const response = await fetch("/api/dashboard-data");
+
+                if (!response.ok) {
+                    return;
+                }
+
+                const data = await response.json();
+
+                document.getElementById("total-attacks").innerText = data.stats.total_attacks;
+                document.getElementById("high-count").innerText = data.stats.high_count;
+                document.getElementById("port-scan-count").innerText = data.stats.port_scan_count;
+                document.getElementById("blocked-count").innerText = data.blocked_count;
+                document.getElementById("sql-count").innerText = data.stats.sql_count;
+                document.getElementById("xss-count").innerText = data.stats.xss_count;
+                document.getElementById("brute-count").innerText = data.stats.brute_count;
+                document.getElementById("high-traffic-count").innerText = data.stats.high_traffic_count;
+
+                document.getElementById("summary-sql-count").innerText = data.stats.sql_count;
+                document.getElementById("summary-xss-count").innerText = data.stats.xss_count;
+                document.getElementById("summary-brute-count").innerText = data.stats.brute_count;
+                document.getElementById("summary-port-scan-count").innerText = data.stats.port_scan_count;
+                document.getElementById("summary-high-traffic-count").innerText = data.stats.high_traffic_count;
+                document.getElementById("summary-medium-count").innerText = data.stats.medium_count;
+
+                updateCharts(data);
+
+                const tableBody = document.getElementById("attacks-table-body");
+                tableBody.innerHTML = "";
+
+                if (data.attacks.length === 0) {
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="9" class="empty-text">No attack records found.</td>
+                        </tr>
+                    `;
+                    return;
+                }
+
+                data.attacks.forEach(attack => {
+                    tableBody.innerHTML += `
+                        <tr>
+                            <td>${attack.id}</td>
+                            <td>${getAttackName(attack.attack_type)}</td>
+                            <td>${attack.source_ip}</td>
+                            <td>${attack.target_ip || "-"}</td>
+                            <td>${attack.protocol || "-"}</td>
+                            <td><span class="badge-custom ${getSeverityClass(attack.severity)}">${attack.severity}</span></td>
+                            <td>${getStatusHtml(attack.status, attack.action)}</td>
+                            <td><span class="action-text">${getActionText(attack.action)}</span></td>
+                            <td>${attack.detected_at}</td>
+                        </tr>
+                    `;
+                });
+
+            } catch (error) {
+                console.log("Dashboard update error:", error);
+            }
+        }
+
+        createCharts();
+        setInterval(updateDashboard, 5000);
+        updateDashboard();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,5 @@
+syntax: glob
+venv/**
+**/__pycache__/**
+*.pyc
+logs/*.txt

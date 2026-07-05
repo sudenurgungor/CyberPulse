@@ -1,0 +1,10 @@
+{
+    "sql_block_threshold": 3,
+    "xss_block_threshold": 3,
+    "high_traffic_threshold": 40,
+    "port_scan_threshold": 5,
+    "sql_block_enabled": true,
+    "xss_block_enabled": true,
+    "high_traffic_block_enabled": true,
+    "port_scan_block_enabled": true
+}
