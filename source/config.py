@@ -1,4 +1,4 @@
 DB_HOST = "localhost"
 DB_NAME = "intrusiondb"
 DB_USER = "postgres"
-DB_PASSWORD = "38118"
+DB_PASSWORD = "your_password"
