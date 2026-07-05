@@ -1,4 +1,8 @@
-# 🛡️ CyberPulse - Real-Time Intrusion Detection & Prevention System (IDS/IPS)
+<h1 align="center">🛡️ CyberPulse</h1>
+
+<p align="center">
+<b>Real-Time Intrusion Detection & Prevention System (IDS/IPS)</b>
+</p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Python-3.x-blue?logo=python">
@@ -10,16 +14,31 @@
 </p>
 
 <p align="center">
-  <b>Lightweight Real-Time Intrusion Detection and Prevention System for Small-Scale Networks</b>
+Lightweight Real-Time Intrusion Detection and Prevention System for Small-Scale Networks
 </p>
 
 ---
 
 # 📌 About The Project
 
-CyberPulse is a lightweight **Real-Time Intrusion Detection and Prevention System (IDS/IPS)** developed as a graduation project.
+CyberPulse is a lightweight **Real-Time Intrusion Detection and Prevention System (IDS/IPS)** developed as a Software Engineering Graduation Project.
 
 The system monitors network traffic in real time, detects malicious activities, stores attack records in a PostgreSQL database, and automatically blocks malicious IP addresses using firewall rules.
+
+CyberPulse provides an interactive web dashboard that allows administrators to monitor attacks, manage blocked IP addresses, configure security rules, and analyze attack statistics.
+
+---
+
+# 🎓 Academic Project
+
+This project was developed as a Software Engineering Graduation Project and demonstrates practical implementations of:
+
+- Network Monitoring
+- Intrusion Detection
+- Automated Prevention Mechanisms
+- Attack Logging and Reporting
+- Database Integration
+- Web-Based Security Dashboard Development
 
 ---
 
@@ -41,7 +60,7 @@ The system monitors network traffic in real time, detects malicious activities, 
 
 # 🏗️ System Architecture
 
-CyberPulse was tested in a virtual lab environment consisting of multiple virtual machines.
+CyberPulse was tested in a virtual laboratory environment consisting of multiple virtual machines.
 
 ```text
 ┌──────────────────┐
@@ -71,8 +90,8 @@ The IDS/IPS monitors network traffic and records detected attacks into PostgreSQ
 
 | Attack Type | Description |
 |-------------|-------------|
-| SQL Injection | Detects malicious SQL payloads |
-| XSS | Detects client-side script injection |
+| SQL Injection | Detects malicious SQL payloads and suspicious query patterns |
+| XSS Attack | Detects client-side script injection attempts |
 | Port Scan | Detects scanning attempts on multiple ports |
 | High Traffic | Detects abnormal traffic spikes |
 | Brute Force | Detects repeated failed login attempts |
@@ -134,11 +153,11 @@ The IDS/IPS monitors network traffic and records detected attacks into PostgreSQ
 CyberPulse uses PostgreSQL to store:
 
 - Attacks
-- Blocked IP addresses
-- Whitelist records
-- Blacklist records
+- Blocked IP Addresses
+- Whitelist Records
+- Blacklist Records
 
-Main tables:
+Main database tables:
 
 ```text
 attacks
@@ -228,7 +247,7 @@ DB_PASSWORD = "your_password"
 
 ---
 
-# ▶️ Run The Project
+# ▶️ Running The Project
 
 ### Start Flask Dashboard
 
@@ -275,7 +294,7 @@ http://127.0.0.1:5000
 
 # 🚀 Future Improvements
 
-- 🤖 Machine Learning based anomaly detection
+- 🤖 Machine Learning-based anomaly detection
 - 📧 Email notification system
 - ⏱️ Automatic unblock timer
 - 👥 Role-based authentication
@@ -292,7 +311,13 @@ http://127.0.0.1:5000
 🎓 Software Engineering Graduate  
 💻 Aspiring Software Developer
 
-GitHub: https://github.com/sudenurgungor
+🌐 [GitHub Profile](https://github.com/sudenurgungor)
+
+---
+
+# 📄 License
+
+This project is intended for educational and research purposes.
 
 ---
 
