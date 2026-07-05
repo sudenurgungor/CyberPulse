@@ -25,7 +25,7 @@ CyberPulse is a lightweight **Real-Time Intrusion Detection and Prevention Syste
 
 The system monitors network traffic in real time, detects malicious activities, stores attack records in a PostgreSQL database, and automatically blocks malicious IP addresses using firewall rules.
 
-CyberPulse also provides an interactive web dashboard for monitoring attacks, managing IP addresses, and configuring security rules.
+CyberPulse provides an interactive web dashboard for monitoring attacks, managing IP addresses, configuring security rules, and analyzing attack statistics.
 
 ---
 
@@ -66,7 +66,7 @@ CyberPulse was tested in a virtual laboratory environment consisting of multiple
 ┌──────────────────┐
 │   Attacker VM    │
 └────────┬─────────┘
-         │
+         │ Attack Traffic
          ▼
 ┌──────────────────┐
 │    CyberPulse    │
@@ -79,120 +79,6 @@ CyberPulse was tested in a virtual laboratory environment consisting of multiple
 ```
 
 The IDS/IPS monitors network traffic, records detected attacks into PostgreSQL, and provides real-time statistics through the web dashboard.
-
----
-
-# 🚨 Supported Attack Types
-
-| Attack Type | Description |
-|-------------|-------------|
-| SQL Injection | Detects malicious SQL payloads and suspicious query patterns |
-| XSS Attack | Detects client-side script injection attempts |
-| Port Scan | Detects scanning attempts on multiple ports |
-| High Traffic | Detects abnormal traffic spikes |
-| Brute Force | Detects repeated failed login attempts |
-
----
-
-# 🖥️ Dashboard Screenshots
-
-## 📊 Dashboard Overview
-
-![Dashboard](docs/images/login.png)
-
----
-
-## 📈 Attack Statistics & Severity Distribution
-
-![Statistics](docs/images/attack-statistics.png)
-
----
-
-## 🚨 Recent Attacks & System Summary
-
-![Recent Attacks](docs/images/recent-attacks.png)
-
----
-
-## 🌐 IP List Management
-
-![IP Lists](docs/images/ip-lists.png)
-
----
-
-## 🚫 Blocked IP Addresses
-
-![Blocked IPs](docs/images/blocked-ips.png)
-
----
-
-## 📝 Attack Logs & CSV Export
-
-![Logs](docs/images/attack-logs.png)
-
----
-
-## ⚙️ Rule Settings - Blocking Controls
-
-![Rule Settings](docs/images/rule-settings1.png)
-
----
-
-## ⚙️ Rule Settings - Threshold Configuration
-
-![Threshold Settings](docs/images/rule-settings2.png)
-
----
-
-# 🗄️ Database
-
-CyberPulse uses PostgreSQL to store:
-
-- Attacks
-- Blocked IP Addresses
-- Whitelist Records
-- Blacklist Records
-
-Main database tables:
-
-```text
-attacks
-blocked_ips
-ip_lists
-```
-
-Database schema:
-
-```text
-database/schema.sql
-```
-
----
-
-# 📁 Project Structure
-
-```text
-CyberPulse
-│
-├── database
-│   ├── README.txt
-│   └── schema.sql
-│
-├── docs
-│   └── images
-│
-├── source
-│   ├── app.py
-│   ├── config.py
-│   ├── db.py
-│   ├── main.py
-│   ├── sniffer.py
-│   └── templates
-│
-├── rules_config.json
-├── README.md
-└── .gitignore
-```
 
 ---
 
@@ -259,6 +145,93 @@ http://127.0.0.1:5000
 
 ---
 
+# 🚨 Supported Attack Types
+
+| Attack Type | Description |
+|-------------|-------------|
+| SQL Injection | Detects malicious SQL payloads and suspicious query patterns |
+| XSS Attack | Detects client-side script injection attempts |
+| Port Scan | Detects scanning attempts on multiple ports |
+| High Traffic | Detects abnormal traffic spikes |
+| Brute Force | Detects repeated failed login attempts |
+
+---
+
+# 🖥️ Dashboard Screenshots
+
+## 🔐 Login Page
+
+![Login](docs/images/login.png)
+
+---
+
+## 📊 Dashboard Overview
+
+![Statistics](docs/images/attack-statistics.png)
+
+---
+
+## 🚨 Recent Attacks & System Summary
+
+![Recent Attacks](docs/images/recent-attacks.png)
+
+---
+
+## 🌐 IP List Management
+
+![IP Lists](docs/images/ip-lists.png)
+
+---
+
+## 🚫 Blocked IP Addresses
+
+![Blocked IPs](docs/images/blocked-ips.png)
+
+---
+
+## 📝 Attack Logs & CSV Export
+
+![Logs](docs/images/attack-logs.png)
+
+---
+
+## ⚙️ Rule Settings - Blocking Controls
+
+![Rule Settings](docs/images/rule-settings1.png)
+
+---
+
+## ⚙️ Rule Settings - Threshold Configuration
+
+![Threshold Settings](docs/images/rule-settings2.png)
+
+---
+
+# 🗄️ Database
+
+CyberPulse uses PostgreSQL to store:
+
+- Attacks
+- Blocked IP Addresses
+- Whitelist Records
+- Blacklist Records
+
+Main database tables:
+
+```text
+attacks
+blocked_ips
+ip_lists
+```
+
+Database schema:
+
+```text
+database/schema.sql
+```
+
+---
+
 # 📊 Dashboard Modules
 
 - 📈 Live attack statistics
@@ -279,6 +252,34 @@ http://127.0.0.1:5000
 | XSS Block Threshold | 3 attempts |
 | High Traffic Threshold | 40 packets / 5 seconds |
 | Port Scan Threshold | 5 different ports |
+
+---
+
+# 📁 Project Structure
+
+```text
+CyberPulse
+│
+├── database
+│   ├── README.txt
+│   └── schema.sql
+│
+├── docs
+│   └── images
+│
+├── source
+│   ├── app.py
+│   ├── config.py
+│   ├── db.py
+│   ├── main.py
+│   ├── sniffer.py
+│   └── templates
+│
+├── requirements.txt
+├── rules_config.json
+├── README.md
+└── .gitignore
+```
 
 ---
 
@@ -304,6 +305,9 @@ http://127.0.0.1:5000
 - 👥 Role-based authentication
 - 🐳 Docker deployment
 - ☁️ Centralized log collection
+- 🌍 Deployment on real network environments
+- 📊 SIEM integration
+- 🔔 Real-time alert notifications
 - 📱 Responsive dashboard improvements
 
 ---
@@ -313,9 +317,10 @@ http://127.0.0.1:5000
 **Sude Güngör**
 
 🎓 Software Engineering Graduate  
-💻 Aspiring Software Developer
+💻 Aspiring Software Developer  
+🔐 Interested in Cybersecurity and Network Security
 
-🌐 [GitHub Profile](https://github.com/sudenurgungor)
+🌐 GitHub: https://github.com/sudenurgungor
 
 ---
 
